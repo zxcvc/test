@@ -10,4 +10,5 @@ export type ItemData = {
     tips?: Array<string>, 
     nexts?: Array<NextItem>,
     music?:string,
+    go?:string
 }

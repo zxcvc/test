@@ -21,12 +21,13 @@ export default defineComponent({
         const tips = p.tips
         const nexts = p.nexts
         const music = p.music
+        const go = p.go
         const page_el = ref<HTMLElement | null>(null)
         function next(n: number = -1) {
             ctx.emit('next', n)
         }
         const fn = () => next()
-        
+
         onMounted(() => {
             if (!qa) {
                 document.body.addEventListener('click', fn)
@@ -58,14 +59,14 @@ export default defineComponent({
                 </div>
 
                 {
-                    props.index === 0 && <div class='start'>
-                        <Button  outline type="primary" size='large'>开始测试</Button>
+                    music && <div class='music'>
+                        <Player src={music}></Player>
                     </div>
                 }
 
                 {
-                    music && <div class='music'>
-                        <Player src={music}></Player>
+                    go && <div class='start'>
+                        <Button outline type="primary" size='large'>{go}</Button>
                     </div>
                 }
 

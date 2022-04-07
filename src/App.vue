@@ -50,8 +50,8 @@ export default defineComponent({
 <audio :src="music_src" ref="audio"></audio>
   <TransitionGroup
     :appear="true"
-    enter-active-class="animate__animated animate__fadeInUp"
-    leave-from-class="animate__animated animate__fadeOutUp"
+    enter-active-class="animate__animated animate__fadeIn"
+    leave-from-class="animate__animated animate__fadeOut"
   >
     <template v-for="(item, i) in data">
       <Item v-if="i === index" :key="i" :data="item" :index="index" @next="next" @play="play"></Item>
