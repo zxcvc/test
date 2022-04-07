@@ -12,8 +12,11 @@ export default defineComponent({
     const img_path = computed(() => index.value + '.jpg')
     const el = ref<HTMLElement | null>(null)
     function next(){
-      if (index.value >= data.length - 1) return
-      ++index.value
+      let id = setTimeout(()=>{
+        if (index.value >= data.length - 1) return
+        ++index.value
+        clearTimeout(id)
+      },200)
     }
     effect(() => {
       document.body.style.backgroundImage = `url(${img_path.value})`
@@ -25,7 +28,7 @@ export default defineComponent({
 
 <template>
   <div>
-    <TransitionGroup :appear="true" enter-to-class="animate__animated animate__fadeInUp" leave-from-class="animate__animated animate__fadeOutUp">
+    <TransitionGroup :appear="true" enter-active-class="animate__animated animate__fadeInUp" leave-from-class="animate__animated animate__fadeOutUp">
         <template v-for="(item, i) in data">
           <Item  v-if="i === index" :key="i" :data="item" :index="index" @next="next"></Item>
         </template>

@@ -1,7 +1,7 @@
 import { computed, defineComponent, onMounted, ref, Transition } from 'vue'
-import {Select,Option} from '@varlet/ui'
-import '@varlet/ui/es/select/style/index.js'
-import '@varlet/ui/es/option/style/index.js'
+import {Select,Option,RadioGroup,Radio} from '@varlet/ui'
+import '@varlet/ui/es/radio-group/style/index.js'
+import '@varlet/ui/es/radio/style/index.js'
 import './index.scss'
 
 import { ItemData, QA } from '../type'
@@ -58,7 +58,7 @@ export default defineComponent({
                             <section key={index}>
                                 <label>
                                     <h3>{item.Q}</h3>
-                                    <Select {...{
+                                    <RadioGroup {...{
                                         modelValue:item.result,
                                         'onUpdate:modelValue':(value)=>{
                                             item.result = value
@@ -66,9 +66,9 @@ export default defineComponent({
                                         }
                                     }}>
                                         {item.A.map((it,i)=>(
-                                            <Option value={it} label={it}></Option>  
+                                            <Radio checkedValue={it} key={i}>{it}</Radio>  
                                         ))}
-                                    </Select>
+                                    </RadioGroup>
                                 </label>
                             </section>
                         )
