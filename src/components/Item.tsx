@@ -1,13 +1,14 @@
-import { computed, defineComponent, onMounted, ref, Transition } from 'vue'
-import {Select,Option,RadioGroup,Radio} from '@varlet/ui'
+import { computed, defineComponent, onMounted, onUnmounted, ref, Transition } from 'vue'
+import { Select, Option, RadioGroup, Radio,Button } from '@varlet/ui'
 import '@varlet/ui/es/radio-group/style/index.js'
 import '@varlet/ui/es/radio/style/index.js'
+import '@varlet/ui/es/button/style/index.js'
 import './index.scss'
 
 import { ItemData, QA } from '../type'
 
 export default defineComponent({
-    name:'Item',
+    name: 'Item',
     props: {
         data: {
             type: Object,
@@ -15,47 +16,99 @@ export default defineComponent({
         },
         index: { type: Number, required: true }
     },
-    emits:['next'],
+    emits: ['next','play'],
     setup(props, ctx) {
         const p = props.data as unknown as ItemData
         const title = p.title
         const qa = p.QA
-        function next(){
-            ctx.emit('next')
+        const content = p.content
+        const tips = p.tips
+        const nexts = p.nexts
+        const music = p.music
+        function next(n:number = -1) {
+            ctx.emit('next',n)
         }
+        const fn = ()=>next()
+        onMounted(() => {
+            if (!qa) {
+                document.body.addEventListener('click', fn)
+            }
+        })
+        onUnmounted(() => {
+            document.body.removeEventListener('click', fn)
+        })
+
         return () => (
             <div class='page'>
-                {
-                    title.map((item, index) => (
-                        <h2 key={index}>{item}</h2>
-                    ))
-                }
+                <div class="title">
+                    {
+                        title && title.map((item, index) => (
+                            <h2 key={index}>{item}</h2>
+                        ))
+                    }
+                </div>
+
+                <div class="content">
+                    {
+                        content && content.map((item, index) => (
+                            <h1 key={index}>{item}</h1>
+                        ))
+                    }
+                </div>
 
                 {
-                    qa.map((item, index) => {
-                        return (
-                            <section key={index}>
+                    music && <div class='music'>
+
+                    <Button type='info' onClick={ (e)=>{e.stopPropagation();ctx.emit('play',music)}}>播放</Button>
+                    </div>
+                }
+
+                <div class="qa">
+                    {
+                        qa && (
+                            <section>
                                 <label>
-                                    <h3>{item.Q}</h3>
+                                    <h3>{qa.Q}</h3>
                                     <RadioGroup {...{
-                                        modelValue:item.result,
-                                        'onUpdate:modelValue':(value)=>{
-                                            console.log(value)
-                                            item.result = value
+                                        modelValue: qa.result,
+                                        'onUpdate:modelValue': (value) => {
+                                            qa.result = value
+                                            console.log(nexts)
+                                            if(nexts){
+                                                // document.body.addEventListener('click',fn)
+                                                return
+                                            }
                                             next()
                                         }
                                     }}>
-                                        {item.A.map((it,i)=>(
+                                        {qa.A.map((it, i) => (
                                             <div key={i}>
-                                                <Radio checkedValue={it}>{it}</Radio>  
+                                                <Radio checkedValue={it}>{it}</Radio>
                                             </div>
                                         ))}
                                     </RadioGroup>
                                 </label>
                             </section>
                         )
-                    })
-                }
+                    }
+                </div>
+
+                <div class="nexts">
+                    {
+                        nexts && nexts.map((item,index)=>(
+                            <a key={index} onClick={(e)=>{e.stopPropagation(); next(item.value); return false}}>{item.label}</a>
+                        ))
+                    }
+                </div>
+
+                <div class="tips">
+                    {
+                        tips && tips.map((item, index) => (
+                            <footer key={index}>{item}</footer>
+                        ))
+                    }
+                </div>
+
             </div>
         )
     }

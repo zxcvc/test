@@ -1,15 +1,36 @@
 .page{
+    // display: flex;
+    // flex-direction: column;
+    position: relative;
+    height: 100%;
     padding-left: 1rem;
-
-    section{
-        margin-top: 2rem;
-        // .v-select {
-        //     background-color: #fff;
-        //     color: #000;
-        // }
-        
+    .title{}
+    .content{
+        margin-top: 5rem;
     }
-    
+    .qa{
+        section{
+            margin-top: 2rem;
+        }
+    }
+    .music{
+        display: flex;
+        justify-content: center;
+        margin-top: 5rem;
+        margin-right: 1rem;
+    }
+    .nexts{
+        margin-top: 5rem;
+        a{
+            text-decoration: underline;
+            margin-right: 2rem;
+        }
+    }
+    .tips{
+        // margin-top: 70vh;
+        position: absolute;
+        bottom: 2rem;
+    }
 }
 .var-select__scroller{
     padding: 0px !important;
