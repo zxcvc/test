@@ -7,6 +7,7 @@ import './index.scss'
 import { ItemData, QA } from '../type'
 
 export default defineComponent({
+    name:'Item',
     props: {
         data: {
             type: Object,
@@ -19,28 +20,6 @@ export default defineComponent({
         const p = props.data as unknown as ItemData
         const title = p.title
         const qa = p.QA
-        const el = ref<HTMLElement | null>(null)
-        onMounted(() => {
-            el.value?.addEventListener('click', e => {
-                e.stopPropagation()
-            })
-        })
-        const _has_selected = new Array(qa.length).fill('')
-        const has_selected = ref(_has_selected)
-        const completed = computed(() => has_selected.value.every(item => item !== ''))
-        let showPicker = ref(false)
-        const col = ref<Array<string>>([])
-        const i = ref<number>(0)
-        function close() {
-            showPicker.value = false
-        }
-        function get_confirm_handler(index: number) {
-            console.log(index)
-            return function (v: string) {
-                has_selected.value[index] = v;
-                showPicker.value = false
-            }
-        }
         function next(){
             ctx.emit('next')
         }
@@ -61,12 +40,15 @@ export default defineComponent({
                                     <RadioGroup {...{
                                         modelValue:item.result,
                                         'onUpdate:modelValue':(value)=>{
+                                            console.log(value)
                                             item.result = value
                                             next()
                                         }
                                     }}>
                                         {item.A.map((it,i)=>(
-                                            <Radio checkedValue={it} key={i}>{it}</Radio>  
+                                            <div key={i}>
+                                                <Radio checkedValue={it}>{it}</Radio>  
+                                            </div>
                                         ))}
                                     </RadioGroup>
                                 </label>

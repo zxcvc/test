@@ -6,6 +6,7 @@ import type { ItemData } from './type'
 
 
 export default defineComponent({
+  name:'App',
   components: { Item },
   setup() {
     const index = ref(0)
