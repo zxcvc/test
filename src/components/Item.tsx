@@ -1,7 +1,11 @@
 import { computed, defineComponent, onMounted, ref, Transition } from 'vue'
-import { Picker, Popup, Field } from 'vant';
-import { ItemData, QA } from '../type'
+import {Select,Option} from '@varlet/ui'
+import '@varlet/ui/es/select/style/index.js'
+import '@varlet/ui/es/option/style/index.js'
 import './index.scss'
+
+import { ItemData, QA } from '../type'
+
 export default defineComponent({
     props: {
         data: {
@@ -37,6 +41,9 @@ export default defineComponent({
                 showPicker.value = false
             }
         }
+        function next(){
+            ctx.emit('next')
+        }
         return () => (
             <div class='page'>
                 {
@@ -51,42 +58,22 @@ export default defineComponent({
                             <section key={index}>
                                 <label>
                                     <h3>{item.Q}</h3>
-                                    <Field {...{
-                                        modelValue: has_selected.value[index],
-                                        isLink: true,
-                                        readonly: true,
-                                        center:true,
-                                        onClick: () => { showPicker.value = true; col.value = item.A; i.value = index }
+                                    <Select {...{
+                                        modelValue:item.result,
+                                        'onUpdate:modelValue':(value)=>{
+                                            item.result = value
+                                            next()
+                                        }
                                     }}>
-                                    </Field>
-
+                                        {item.A.map((it,i)=>(
+                                            <Option value={it} label={it}></Option>  
+                                        ))}
+                                    </Select>
                                 </label>
                             </section>
                         )
                     })
                 }
-                <Transition {...{
-                    enterActiveClass: 'animate__animated animate__slideInUp',
-                    leaveActiveClass: 'animate__animated animate__slideOutDown'
-                }}>
-                    {completed.value && <div class='next' onClick={()=>ctx.emit('next')}>继续</div>}
-                </Transition>
-
-                <Popup  {...{
-                    safeAreaInsetBottom: true,
-                    duration: 0.3,
-                    teleport: document.body,
-                    round: false,
-                    position: 'bottom',
-                    show: showPicker.value,
-                    "onUpdate:show": (v) => { showPicker.value = v; }
-                }} >
-                    <Picker {...{
-                        columns: col.value,
-                        onCancel: close,
-                        onConfirm: get_confirm_handler(i.value),
-                    }} />
-                </Popup>
             </div>
         )
     }

@@ -1,9 +1,22 @@
 .page{
     padding-left: 1rem;
+
     section{
         margin-top: 2rem;
+        // .v-select {
+        //     background-color: #fff;
+        //     color: #000;
+        // }
+        
     }
-    .next{
-        margin-top: 10rem;
-    }
+    
+}
+.var-select__scroller{
+    padding: 0px !important;
+}
+.var-option--selected-background{
+    background-color: transparent;
+}
+.var-option--selected-color {
+    color: #fff;
 }
