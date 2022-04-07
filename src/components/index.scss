@@ -1,14 +1,14 @@
 .page{
-    background-image: url(/up.svg);
-    background-repeat: no-repeat;
-    background-position: 47.5% bottom;
-    background-size: 18%;
     position: relative;
     height: 100%;
     padding: 0px 1rem;
     .title{}
     .content{
         margin-top: 5rem;
+    }
+    .start{
+        margin-top: 2rem;
+        text-align: center;
     }
     .qa{
         section{
@@ -33,12 +33,7 @@
         position: absolute;
         bottom: 4rem;
     }
-    .up{
-        display: flex;
-        justify-content: center;
-        padding-right: 1rem;
-        font-size: 10px;
-    }
+    
     footer{
         font-size: 14px;
     }

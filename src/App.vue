@@ -29,14 +29,6 @@ export default defineComponent({
     const audio = ref<HTMLAudioElement|null>(null)
     function play(src: string) {
       if(playing) return 
-      // const audio = new Audio(src)
-      // audio.addEventListener('canplaythrough', event => {
-      //   audio.play();
-      //   playing = true
-      // })
-      // audio.addEventListener('ended',()=>{
-      //   playing = false
-      // })
       audio.value?.addEventListener('canplaythrough',()=>{
         audio.value?.play()
         playing = true

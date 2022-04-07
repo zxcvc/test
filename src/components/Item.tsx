@@ -1,10 +1,8 @@
 import { computed, defineComponent, onMounted, onUnmounted, ref, Transition } from 'vue'
 import { Select, Option, RadioGroup, Radio, Button } from '@varlet/ui'
-
 import './index.scss'
-
 import { ItemData, QA } from '../type'
-
+import Player from './Player'
 export default defineComponent({
     name: 'Item',
     props: {
@@ -24,32 +22,11 @@ export default defineComponent({
         const nexts = p.nexts
         const music = p.music
         const page_el = ref<HTMLElement | null>(null)
-        let playing = false
         function next(n: number = -1) {
             ctx.emit('next', n)
         }
         const fn = () => next()
-
-        function play(src: string) {
-            if (playing) return
-            const audio = new Audio(src)
-            
-            audio.addEventListener('canplaythrough', event => {
-                audio.play();
-                playing = true
-            })
-            audio.addEventListener('ended', () => {
-                playing = false
-            })
-            audio.load()
-            // audio.value?.addEventListener('canplaythrough',()=>{
-            //   audio.value?.play()
-            //   playing = true
-            // })
-            // audio.value?.addEventListener('ended',()=>{
-            //   playing = false
-            // })
-        }
+        
         onMounted(() => {
             if (!qa) {
                 document.body.addEventListener('click', fn)
@@ -75,14 +52,20 @@ export default defineComponent({
                 <div class="content">
                     {
                         content && content.map((item, index) => (
-                            <h1 key={index}>{item}</h1>
+                            <h2 key={index}>{item}</h2>
                         ))
                     }
                 </div>
 
                 {
+                    props.index === 0 && <div class='start'>
+                        <Button  outline type="primary" size='large'>开始测试</Button>
+                    </div>
+                }
+
+                {
                     music && <div class='music'>
-                        <Button type='info' onClick={(e) => { e.stopPropagation(); /*ctx.emit('play', music)*/ play(music) }}>播放</Button>
+                        <Player src={music}></Player>
                     </div>
                 }
 
