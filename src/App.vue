@@ -1,10 +1,8 @@
 <script lang="ts">
 import { defineComponent, ref, TransitionGroup, onMounted, computed, effect, reactive, Fragment, AudioHTMLAttributes } from 'vue'
-import data from './data.json'
+import data from '../public/data.json'
 import Item from './components/Item'
 import type { ItemData } from './type'
-import { platform } from 'os'
-
 
 export default defineComponent({
   name: 'App',
@@ -14,8 +12,6 @@ export default defineComponent({
     const img_path = computed(() => data[index.value].image)
     const el = ref<HTMLElement | null>(null)
     const music = ref<string | undefined>()
-    const audio_el = ref<AudioHTMLAttributes | null>(null)
-
     function next(n: number = -1) {
       console.log(n)
       if (n !== -1) {
@@ -29,14 +25,23 @@ export default defineComponent({
       }, 200)
     }
     let playing = false
+    const music_src = computed(()=>data[index.value].music)
+    const audio = ref<HTMLAudioElement|null>(null)
     function play(src: string) {
       if(playing) return 
-      const audio = new Audio(src)
-      audio.addEventListener("canplaythrough", event => {
-        audio.play();
+      // const audio = new Audio(src)
+      // audio.addEventListener('canplaythrough', event => {
+      //   audio.play();
+      //   playing = true
+      // })
+      // audio.addEventListener('ended',()=>{
+      //   playing = false
+      // })
+      audio.value?.addEventListener('canplaythrough',()=>{
+        audio.value?.play()
         playing = true
       })
-      audio.addEventListener('ended',()=>{
+      audio.value?.addEventListener('ended',()=>{
         playing = false
       })
     }
@@ -44,15 +49,13 @@ export default defineComponent({
     effect(() => {
       document.body.style.backgroundImage = `url(${img_path.value})`
     })
-    return { data: reactive(data) as Array<ItemData>, index, el, img_path, next, music, play }
+    return { data: reactive(data) as Array<ItemData>, index, el, img_path, next, music_src, play }
   }
 })
 </script>
 
 <template>
-  <div id="audio-wraper">
-    <audio :src="music"></audio>
-  </div>
+<audio :src="music_src" ref="audio"></audio>
   <TransitionGroup
     :appear="true"
     enter-active-class="animate__animated animate__fadeInUp"

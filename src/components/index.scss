@@ -1,9 +1,11 @@
 .page{
-    // display: flex;
-    // flex-direction: column;
+    background-image: url(/up.svg);
+    background-repeat: no-repeat;
+    background-position: 47.5% bottom;
+    background-size: 18%;
     position: relative;
     height: 100%;
-    padding-left: 1rem;
+    padding: 0px 1rem;
     .title{}
     .content{
         margin-top: 5rem;
@@ -29,7 +31,16 @@
     .tips{
         // margin-top: 70vh;
         position: absolute;
-        bottom: 2rem;
+        bottom: 4rem;
+    }
+    .up{
+        display: flex;
+        justify-content: center;
+        padding-right: 1rem;
+        font-size: 10px;
+    }
+    footer{
+        font-size: 14px;
     }
 }
 .var-select__scroller{

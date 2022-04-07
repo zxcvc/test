@@ -1,8 +1,6 @@
 import { computed, defineComponent, onMounted, onUnmounted, ref, Transition } from 'vue'
-import { Select, Option, RadioGroup, Radio,Button } from '@varlet/ui'
-import '@varlet/ui/es/radio-group/style/index.js'
-import '@varlet/ui/es/radio/style/index.js'
-import '@varlet/ui/es/button/style/index.js'
+import { Select, Option, RadioGroup, Radio, Button } from '@varlet/ui'
+
 import './index.scss'
 
 import { ItemData, QA } from '../type'
@@ -16,7 +14,7 @@ export default defineComponent({
         },
         index: { type: Number, required: true }
     },
-    emits: ['next','play'],
+    emits: ['next', 'play'],
     setup(props, ctx) {
         const p = props.data as unknown as ItemData
         const title = p.title
@@ -25,13 +23,39 @@ export default defineComponent({
         const tips = p.tips
         const nexts = p.nexts
         const music = p.music
-        function next(n:number = -1) {
-            ctx.emit('next',n)
+        const page_el = ref<HTMLElement | null>(null)
+        let playing = false
+        function next(n: number = -1) {
+            ctx.emit('next', n)
         }
-        const fn = ()=>next()
+        const fn = () => next()
+
+        function play(src: string) {
+            if (playing) return
+            const audio = new Audio(src)
+            
+            audio.addEventListener('canplaythrough', event => {
+                audio.play();
+                playing = true
+            })
+            audio.addEventListener('ended', () => {
+                playing = false
+            })
+            audio.load()
+            // audio.value?.addEventListener('canplaythrough',()=>{
+            //   audio.value?.play()
+            //   playing = true
+            // })
+            // audio.value?.addEventListener('ended',()=>{
+            //   playing = false
+            // })
+        }
         onMounted(() => {
             if (!qa) {
                 document.body.addEventListener('click', fn)
+            }
+            if (qa) {
+                page_el.value!.style.background = 'none'
             }
         })
         onUnmounted(() => {
@@ -39,7 +63,7 @@ export default defineComponent({
         })
 
         return () => (
-            <div class='page'>
+            <div class='page' ref={page_el}>
                 <div class="title">
                     {
                         title && title.map((item, index) => (
@@ -58,8 +82,7 @@ export default defineComponent({
 
                 {
                     music && <div class='music'>
-
-                    <Button type='info' onClick={ (e)=>{e.stopPropagation();ctx.emit('play',music)}}>播放</Button>
+                        <Button type='info' onClick={(e) => { e.stopPropagation(); /*ctx.emit('play', music)*/ play(music) }}>播放</Button>
                     </div>
                 }
 
@@ -74,7 +97,7 @@ export default defineComponent({
                                         'onUpdate:modelValue': (value) => {
                                             qa.result = value
                                             console.log(nexts)
-                                            if(nexts){
+                                            if (nexts) {
                                                 // document.body.addEventListener('click',fn)
                                                 return
                                             }
@@ -95,8 +118,8 @@ export default defineComponent({
 
                 <div class="nexts">
                     {
-                        nexts && nexts.map((item,index)=>(
-                            <a key={index} onClick={(e)=>{e.stopPropagation(); next(item.value); return false}}>{item.label}</a>
+                        nexts && nexts.map((item, index) => (
+                            <a key={index} onClick={(e) => { e.stopPropagation(); next(item.value); return false }}>{item.label}</a>
                         ))
                     }
                 </div>
@@ -108,7 +131,6 @@ export default defineComponent({
                         ))
                     }
                 </div>
-
             </div>
         )
     }
