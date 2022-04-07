@@ -2,22 +2,17 @@
     {
         "title": [
             "Orchestral Music ",
-            "Listening Test"
+            "Listening Test",
+            "Some Simple Question Before We Start. ",
+            "几个简单的问题，让我们更了解您"
         ],
         "content": [
             "交响音乐听觉能力测试"
         ],
-        "image": "0.jpg"
-    },
-    {
-        "title": [
-            "Some Simple Question Before We Start. ",
-            "几个简单的问题，让我们更了解您"
-        ],
         "tips": [
             "本测试不收集任何您的个人信息，请放心填写。"
         ],
-        "image":"1.jpg"
+        "image": "0.jpg"
     },
     {
         "title": [
